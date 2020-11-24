@@ -32,14 +32,39 @@ func get(a accessor, n int) person {
 	return a.retrieve(n)
 }
 
+type service struct {
+	x accessor
+}
+
+func (ps service) get(n int) person {
+	return ps.x.retrieve(n)
+}
+
+func (ps service) put(n int, p person) {
+	ps.x.save(n, p)
+}
+
 func main() {
 	data := mdb{}
+
+	ps := service{
+		x: mdb{},
+	}
 
 	p1 := person{
 		fname: "manas",
 	}
 
+	p2 := person{
+		fname: "dil",
+	}
+
+	put(ps.x, 2, p2)
+	put(ps.x, 1, p1)
 	put(data, 1, p1)
 	fmt.Println(get(data, 1))
+	fmt.Println("-------------------------------")
+	fmt.Println(ps.get(1))
+	fmt.Println(ps.get(2))
 
 }
